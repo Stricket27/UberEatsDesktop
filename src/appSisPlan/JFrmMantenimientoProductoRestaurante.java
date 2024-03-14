@@ -1,0 +1,883 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package appSisPlan;
+
+import sisPlanDAL.ProductoDAL;
+import sisPlanDAL.RestauranteDAL;
+import java.util.ArrayList;
+import java.util.Iterator;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import sisPlanEntidades.Empacados;
+import sisPlanEntidades.Preparados;
+import sisPlanEntidades.Producto;
+import sisPlanEntidades.Restaurante;
+import sisPlanEntidades.TipoComida;
+import sisPlanEntidades.Usuario;
+
+/**
+ *
+ * @author moise
+ */
+public class JFrmMantenimientoProductoRestaurante extends javax.swing.JFrame {
+
+    Producto oProducto;
+    Restaurante oRestaurante;
+    private DefaultTableModel modeloProductos;
+    private DefaultTableModel modeloRestaurante;
+    Usuario usuarioActivo;
+
+    /**
+     * Creates new form JFrmMantenimientoProductoRestaurante
+     */
+    public JFrmMantenimientoProductoRestaurante() {
+        initComponents();
+
+        modeloProductos = (DefaultTableModel) this.jTable2.getModel();
+        modeloRestaurante = (DefaultTableModel) this.jTable1.getModel();
+
+        jPanel2.setVisible(false);
+        jPanel1.setVisible(false);
+        llenarDatos();
+
+        this.jTxtTiempo.setVisible(false);
+        this.jTxtCantidad.setVisible(false);
+        jLabel13.setVisible(false);
+        jLabel11.setVisible(false);
+        this.jLabel14.setVisible(false);
+        this.jCboImpuesto.setVisible(false);
+    }
+
+    public void llenarDatos() {
+
+        for (TipoComida value : TipoComida.values()) {
+            this.jCboTipoComida.addItem(value);
+        }
+        for (int i = 0; i <= 13; i++) {
+            jCboImpuesto.addItem(i);
+        }
+        Producto empacado = new Empacados();
+        empacado.setNombreClase(true);
+        Producto preparado = new Preparados();
+        preparado.setNombreClase(true);
+        this.jCboTipoProducto.addItem(empacado);
+        this.jCboTipoProducto.addItem(preparado);
+
+        this.jCboTipoProducto.setSelectedIndex(-1);
+        this.jCboTipoComida.setSelectedIndex(-1);
+        this.jCboTipoProducto.setSelectedIndex(-1);
+    }
+
+    public void llenarRestaurantes() throws Exception {
+        try {
+            ArrayList<Restaurante> lista = RestauranteDAL.restaurantePorGerente(usuarioActivo.getCodigo());
+            this.jCboRestaurantesDisponibles.removeAllItems();
+            for (Restaurante restaurante : lista) {
+                this.jCboRestaurantesDisponibles.addItem(restaurante);
+            }
+            this.jCboRestaurantesDisponibles.setSelectedIndex(-1);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.toString());
+        }
+    }
+
+    private void llenarTabla() {
+
+        try {
+            modeloProductos.setRowCount(0);
+            ArrayList<Restaurante> listadoR = RestauranteDAL.restaurantePorGerente(usuarioActivo.getCodigo());
+
+            for (Restaurante restaurante : listadoR) {
+                ArrayList<Producto> listadoP = ProductoDAL.llenarProducto(restaurante.getCodigo());
+
+                Object[] fila = new Object[8];
+                Iterator<Producto> item = listadoP.iterator();
+                while (item.hasNext()) {
+                    Producto pro = item.next();
+                    fila[0] = pro.getCodigo();
+                    fila[1] = pro.getDescripcion();
+                    fila[2] = pro.getPrecio();
+                    fila[3] = restaurante.getNombre();
+                    fila[4] = pro.getClass().getSimpleName();
+                    if (pro instanceof Empacados) {
+                        fila[5] = ((Empacados) pro).getCantidad();
+                        fila[6] = 0;
+                        fila[7] = ((Empacados) pro).getPorcentajeImpuesto();
+                    } else {
+                        fila[5] = 1;
+                        fila[6] = ((Preparados) pro).getTiempoPreparacion();
+                        fila[7] = ((Preparados) pro).getPorcentajeIVA();
+                    }
+
+                    modeloProductos.addRow(fila);
+                }
+            }
+
+            Object[] fila = new Object[4];
+            modeloRestaurante.setRowCount(0);
+            Iterator<Restaurante> item = listadoR.iterator();
+            while (item.hasNext()) {
+                Restaurante res = item.next();
+                fila[0] = res.getNombre();
+                fila[1] = res.getLocalizacion();
+                fila[2] = res.getTipoComida().name();
+                fila[3] = res.getCodigo();
+                modeloRestaurante.addRow(fila);
+            }
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        }
+    }
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
+    @SuppressWarnings("unchecked")
+    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
+    private void initComponents() {
+
+        jLabel7 = new javax.swing.JLabel();
+        Mantenimiento = new javax.swing.ButtonGroup();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jTxtNombre = new javax.swing.JTextField();
+        jTxtLocalizacion = new javax.swing.JTextField();
+        jCboTipoComida = new javax.swing.JComboBox<>();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        jLabel9 = new javax.swing.JLabel();
+        jTxtCodigo1 = new javax.swing.JTextField();
+        jBtnLimpiarR = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jTxtCodigo = new javax.swing.JTextField();
+        jTxtDescripcion = new javax.swing.JTextField();
+        jTxtPrecio = new javax.swing.JTextField();
+        jLabel12 = new javax.swing.JLabel();
+        jCboRestaurantesDisponibles = new javax.swing.JComboBox<>();
+        jLabel10 = new javax.swing.JLabel();
+        jCboTipoProducto = new javax.swing.JComboBox<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
+        jLabel11 = new javax.swing.JLabel();
+        jTxtTiempo = new javax.swing.JTextField();
+        jLabel13 = new javax.swing.JLabel();
+        jTxtCantidad = new javax.swing.JTextField();
+        jBtnLimpiar = new javax.swing.JButton();
+        jLabel14 = new javax.swing.JLabel();
+        jCboImpuesto = new javax.swing.JComboBox<>();
+        jToolBar1 = new javax.swing.JToolBar();
+        jBtnAgregar = new javax.swing.JButton();
+        jBtnModificar = new javax.swing.JButton();
+        jBtnEliminar = new javax.swing.JButton();
+        jBtnSalir = new javax.swing.JButton();
+        jRdbRestaurante = new javax.swing.JRadioButton();
+        jRdbProducto = new javax.swing.JRadioButton();
+        jLabel8 = new javax.swing.JLabel();
+        jLblNombreUsuario1 = new javax.swing.JLabel();
+        jLabel15 = new javax.swing.JLabel();
+
+        jLabel7.setText("jLabel7");
+
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Mantenimiento de Restaurante y Producto");
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Restaurante"));
+
+        jLabel4.setText("Nombre");
+
+        jLabel5.setText("Localización");
+
+        jLabel6.setText("Tipo de Comida");
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Nombre", "Localización", "Tipo de Comida", "Codigo"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+
+        jLabel9.setText("Codigo");
+
+        jBtnLimpiarR.setText("Limpiar");
+        jBtnLimpiarR.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnLimpiarRActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(74, 74, 74)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6, javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jLabel5))
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel4))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jCboTipoComida, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jBtnLimpiarR))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jTxtCodigo1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTxtLocalizacion, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 101, Short.MAX_VALUE))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel9)
+                    .addComponent(jTxtCodigo1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(jTxtLocalizacion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel4)
+                    .addComponent(jTxtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCboTipoComida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6)
+                    .addComponent(jBtnLimpiarR))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Producto"));
+        jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel3.setText("Precio");
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, -1, -1));
+
+        jLabel1.setText("Codigo");
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, -1, -1));
+
+        jLabel2.setText("Nombre de Producto");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 60, -1, -1));
+        jPanel1.add(jTxtCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 30, 162, -1));
+        jPanel1.add(jTxtDescripcion, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 60, 308, -1));
+        jPanel1.add(jTxtPrecio, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 90, 166, -1));
+
+        jLabel12.setText("Restaurante Disponibles");
+        jPanel1.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, -1, -1));
+
+        jPanel1.add(jCboRestaurantesDisponibles, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 120, 300, -1));
+
+        jLabel10.setText("Tipo de Producto");
+        jPanel1.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, -1, -1));
+
+        jCboTipoProducto.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCboTipoProductoItemStateChanged(evt);
+            }
+        });
+        jPanel1.add(jCboTipoProducto, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 160, 170, -1));
+
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "Codigo", "Descripcion", "Precio", "Restaurante", "Tipo de Producto", "Cantidad", "Tiempo", "Impuesto"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Double.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable2MouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(jTable2);
+
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 310, 740, 310));
+
+        jLabel11.setText("Tiempo");
+        jPanel1.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 230, -1, -1));
+        jPanel1.add(jTxtTiempo, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 230, 80, -1));
+
+        jLabel13.setText("Porcentaje de Impuesto");
+        jPanel1.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 270, -1, -1));
+        jPanel1.add(jTxtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 82, -1));
+
+        jBtnLimpiar.setText("Limpiar");
+        jBtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnLimpiarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jBtnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 30, -1, 30));
+
+        jLabel14.setText("Cantidad");
+        jPanel1.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, -1, -1));
+
+        jPanel1.add(jCboImpuesto, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 270, 80, -1));
+
+        jToolBar1.setBorder(javax.swing.BorderFactory.createTitledBorder("Herramientas"));
+        jToolBar1.setRollover(true);
+
+        jBtnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sisPlanImagenes/Aceptar.png"))); // NOI18N
+        jBtnAgregar.setText("Agregar");
+        jBtnAgregar.setEnabled(false);
+        jBtnAgregar.setFocusable(false);
+        jBtnAgregar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jBtnAgregar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jBtnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnAgregarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jBtnAgregar);
+
+        jBtnModificar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sisPlanImagenes/Modificar.png"))); // NOI18N
+        jBtnModificar.setText("Modificar");
+        jBtnModificar.setEnabled(false);
+        jBtnModificar.setFocusable(false);
+        jBtnModificar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jBtnModificar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jBtnModificar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnModificarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jBtnModificar);
+
+        jBtnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sisPlanImagenes/Eliminar.png"))); // NOI18N
+        jBtnEliminar.setText("Eliminar");
+        jBtnEliminar.setEnabled(false);
+        jBtnEliminar.setFocusable(false);
+        jBtnEliminar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jBtnEliminar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jBtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnEliminarActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jBtnEliminar);
+
+        jBtnSalir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sisPlanImagenes/AnteriorPagina.png"))); // NOI18N
+        jBtnSalir.setText("Salir");
+        jBtnSalir.setFocusable(false);
+        jBtnSalir.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jBtnSalir.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jBtnSalir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnSalirActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(jBtnSalir);
+
+        Mantenimiento.add(jRdbRestaurante);
+        jRdbRestaurante.setText("Mantenimiento Restaurante");
+        jRdbRestaurante.setFocusable(false);
+        jRdbRestaurante.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRdbRestaurante.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRdbRestaurante.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRdbRestauranteMouseClicked(evt);
+            }
+        });
+        jToolBar1.add(jRdbRestaurante);
+
+        Mantenimiento.add(jRdbProducto);
+        jRdbProducto.setText("Mantenimiento Producto");
+        jRdbProducto.setFocusable(false);
+        jRdbProducto.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jRdbProducto.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jRdbProducto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jRdbProductoMouseClicked(evt);
+            }
+        });
+        jToolBar1.add(jRdbProducto);
+
+        jLabel8.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        jLabel8.setText("■");
+
+        jLblNombreUsuario1.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+
+        jLabel15.setIcon(new javax.swing.ImageIcon(getClass().getResource("/sisPlanImagenes/Logo de Uber Eats.png"))); // NOI18N
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLblNombreUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 859, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(74, 74, 74)
+                                .addComponent(jLabel15)))
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLblNombreUsuario1, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(8, 8, 8)
+                                .addComponent(jLabel8)))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel15))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 640, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
+
+        pack();
+    }// </editor-fold>//GEN-END:initComponents
+
+    private void jBtnSalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnSalirActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_jBtnSalirActionPerformed
+
+    private void jBtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAgregarActionPerformed
+        // TODO add your handling code here:
+
+        //VALIDAR RESTAURANTE
+        if (sisPlanUtilitarios.ValidadorFormatos.validarVacio(this.jTxtCodigo1.getText()) && sisPlanUtilitarios.ValidadorFormatos.validarVacio(this.jTxtLocalizacion.getText())
+                && sisPlanUtilitarios.ValidadorFormatos.validarVacio(this.jTxtNombre.getText()) && this.jCboTipoComida.getSelectedIndex() == - 1) {
+            JOptionPane.showMessageDialog(this, "Por favor revisar que no este ningún espacio en blanco");
+        }
+
+        //VALIDAR PRODUCTO
+        if (sisPlanUtilitarios.ValidadorFormatos.validarVacio(this.jTxtCodigo.getText()) && sisPlanUtilitarios.ValidadorFormatos.validarVacio(this.jTxtDescripcion.getText())
+                && sisPlanUtilitarios.ValidadorFormatos.validarEntero(this.jTxtPrecio.getText()) && this.jCboRestaurantesDisponibles.getSelectedIndex() == -1
+                && this.jCboTipoProducto.getSelectedIndex() == - 1) {
+            JOptionPane.showMessageDialog(this, "Por favor revisar que no este ningún espacio en blanco");
+        }
+        // AGREGAR RESTAURANTE
+        //VERIFICAR QUE EL CODIGO YA EXISTE
+        try {
+            if (this.jRdbRestaurante.isSelected()) {
+                if (RestauranteDAL.codigoVerificarRestaurante(this.jTxtCodigo1.getText())) {
+                    JOptionPane.showMessageDialog(this, "Ya existe el codigo");
+                    return;
+                }
+                oRestaurante = new Restaurante();
+                oRestaurante.setCodigo(this.jTxtCodigo1.getText());
+                oRestaurante.setNombre(this.jTxtNombre.getText());
+                oRestaurante.setLocalizacion(this.jTxtLocalizacion.getText());
+                oRestaurante.setTipoComida((TipoComida) this.jCboTipoComida.getSelectedItem());
+                RestauranteDAL.insertaRestaurante(oRestaurante, usuarioActivo);
+                JOptionPane.showMessageDialog(this, "Restaurante registrado");
+
+                this.jTxtCodigo1.setText("");
+                this.jTxtLocalizacion.setText("");
+                this.jTxtNombre.setText("");
+                this.jCboTipoComida.setSelectedIndex(-1);
+            } else {
+
+                // AGREGAR PRODUCTO
+                //VERIFICAR QUE EL CODIGO YA EXISTE
+                if (this.jRdbProducto.isSelected()) {
+                    if (ProductoDAL.codigoVerificarProducto(this.jTxtCodigo.getText())) {
+                        JOptionPane.showMessageDialog(this, "Ya existe el codigo");
+                        return;
+                    }
+                    oProducto = (Producto) this.jCboTipoProducto.getSelectedItem();
+                    oProducto.setCodigo(this.jTxtCodigo.getText());
+                    oProducto.setDescripcion(this.jTxtDescripcion.getText());
+                    oProducto.setPrecio(Integer.parseInt(this.jTxtPrecio.getText()));
+                    oProducto.setRestaurante((Restaurante) this.jCboRestaurantesDisponibles.getSelectedItem());
+                    if (oProducto instanceof Preparados) {
+                        ((Preparados) oProducto).setTiempoPreparacion(Integer.parseInt(this.jTxtTiempo.getText()));
+                        ((Preparados) oProducto).setPorcentajeIVA(13);
+                    } else {
+                        ((Empacados) oProducto).setCantidad(Integer.parseInt(this.jTxtCantidad.getText()));
+                        ((Empacados) oProducto).setPorcentajeImpuesto((int) jCboImpuesto.getSelectedItem());
+                    }
+                    ProductoDAL.insertarProductoRestaurante(oProducto, (Restaurante) this.jCboRestaurantesDisponibles.getSelectedItem());
+                    JOptionPane.showMessageDialog(this, "Producto preparado");
+                    this.jTxtCodigo.setText("");
+                    this.jTxtDescripcion.setText("");
+                    this.jCboRestaurantesDisponibles.setSelectedIndex(-1);
+                    this.jCboTipoProducto.setSelectedIndex(-1);
+                    this.jTxtPrecio.setText("");
+                    this.jTxtTiempo.setVisible(false);
+                    this.jLabel11.setVisible(false);
+                    this.jTxtTiempo.setText("");
+                    this.jTxtCantidad.setVisible(false);
+                    this.jCboImpuesto.setSelectedIndex(-1);
+                    this.jCboImpuesto.setVisible(false);
+                    this.jLabel13.setVisible(false);
+                    this.jLabel14.setVisible(false);
+                    this.jCboImpuesto.setSelectedIndex(-1);
+                    this.jTxtCantidad.setText("");
+                }
+            }
+            llenarTabla();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.toString());
+        }
+
+    }//GEN-LAST:event_jBtnAgregarActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        // TODO add your handling code here:
+        //VER QUIEN ESTA CONECTADO AHORA MISMO
+        this.jLblNombreUsuario1.setText(usuarioActivo.getNombre() + " - " + usuarioActivo.getPerfil().toString());
+        this.llenarTabla();
+
+    }//GEN-LAST:event_formWindowOpened
+
+    private void jRdbRestauranteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRdbRestauranteMouseClicked
+        // TODO add your handling code here:
+        jPanel1.setVisible(false);
+        jPanel2.setVisible(true);
+        jBtnEliminar.setEnabled(false);
+        jBtnModificar.setEnabled(false);
+        jBtnAgregar.setEnabled(true);
+    }//GEN-LAST:event_jRdbRestauranteMouseClicked
+
+    private void jRdbProductoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jRdbProductoMouseClicked
+        try {
+            this.llenarRestaurantes();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.toString());
+        }
+
+        jPanel2.setVisible(false);
+        jPanel1.setVisible(true);
+        jBtnEliminar.setEnabled(false);
+        jBtnModificar.setEnabled(false);
+        jBtnAgregar.setEnabled(true);
+    }//GEN-LAST:event_jRdbProductoMouseClicked
+
+    private void jBtnModificarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnModificarActionPerformed
+        //MODIFICAR SOLAMENTE EL PRODUCTO
+        try {
+            oProducto = (Producto) this.jCboTipoProducto.getSelectedItem();
+            oProducto.setCodigo(this.jTxtCodigo.getText());
+            oProducto.setDescripcion(this.jTxtDescripcion.getText());
+            oProducto.setPrecio(Integer.parseInt(this.jTxtPrecio.getText()));
+            oProducto.setRestaurante((Restaurante) this.jCboRestaurantesDisponibles.getSelectedItem());
+            if (oProducto instanceof Preparados) {
+                ((Preparados) oProducto).setTiempoPreparacion(Integer.parseInt(this.jTxtTiempo.getText()));
+            } else {
+                ((Empacados) oProducto).setCantidad(Integer.parseInt(this.jTxtCantidad.getText()));
+            }
+            ProductoDAL.modificarProductoRestaurante(oProducto, (Restaurante) this.jCboRestaurantesDisponibles.getSelectedItem());
+            JOptionPane.showMessageDialog(this, "Producto Modificado");
+            llenarTabla();
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.toString());
+        }
+
+    }//GEN-LAST:event_jBtnModificarActionPerformed
+
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+        // TODO add your handling code here:
+
+        // TABLA RESTAURANTE
+        if (this.jTable1.getSelectedRow() != -1) {
+
+            String nombre = (String) this.modeloRestaurante.getValueAt(this.jTable1.getSelectedRow(), 0);
+            String localizacion = (String) this.modeloRestaurante.getValueAt(this.jTable1.getSelectedRow(), 1);
+            for (TipoComida value : TipoComida.values()) {
+                String tipo = String.valueOf(this.modeloRestaurante.getValueAt(this.jTable1.getSelectedRow(), 2));
+                if (value.name().equals(tipo)) {
+                    TipoComida tipoC = value;
+                    this.jCboTipoComida.setSelectedItem(tipoC);
+                }
+            }
+            String codigo = (String) this.modeloRestaurante.getValueAt(this.jTable1.getSelectedRow(), 3);
+            this.jTxtCodigo1.setText(codigo);
+            this.jTxtNombre.setText(nombre);
+            this.jTxtLocalizacion.setText(localizacion);
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe de seleccionar un campo");
+        }
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    private void jBtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEliminarActionPerformed
+        // TODO add your handling code here:
+
+        // ELIMINAR PRODUCTO
+        try {
+            ProductoDAL.eliminarProductoRestaurante(this.jTxtCodigo.getText());
+            JOptionPane.showMessageDialog(this, "Se elimino el producto");
+            this.llenarTabla();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, ex.toString());
+        }
+
+    }//GEN-LAST:event_jBtnEliminarActionPerformed
+
+    private void jCboTipoProductoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCboTipoProductoItemStateChanged
+        //VALIDAR EL COMBOBOX DEL PRODUCTO
+        if (this.jCboTipoProducto.getSelectedIndex() != -1) {
+            Producto producto = (Producto) this.jCboTipoProducto.getSelectedItem();
+            if (producto instanceof Preparados) {
+                this.jTxtCantidad.setVisible(false);
+                this.jTxtTiempo.setVisible(true);
+                this.jLabel13.setVisible(false);
+                this.jLabel11.setVisible(true);
+                this.jLabel14.setVisible(false);
+                this.jCboImpuesto.setVisible(false);
+            } else {
+                this.jTxtCantidad.setVisible(true);
+                this.jTxtTiempo.setVisible(false);
+                this.jLabel11.setVisible(false);
+                this.jLabel13.setVisible(true);
+                this.jLabel14.setVisible(true);
+                this.jCboImpuesto.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_jCboTipoProductoItemStateChanged
+
+    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+        //AL DARLE CLICK A LA TABLA DE PRODCTOS
+        if (this.jTable2.getSelectedRow() != -1) {
+            String codigo = (String) this.modeloProductos.getValueAt(this.jTable2.getSelectedRow(), 0);
+            String descripcion = (String) this.modeloProductos.getValueAt(this.jTable2.getSelectedRow(), 1);
+            int precio = (int) this.modeloProductos.getValueAt(this.jTable2.getSelectedRow(), 2);
+            jTxtCodigo.setText(codigo);
+            jTxtDescripcion.setText(descripcion);
+            jTxtPrecio.setText(String.valueOf(precio));
+            try {
+                ArrayList<Restaurante> lista = RestauranteDAL.restaurantePorGerente(usuarioActivo.getCodigo());
+                String codigoRestaurante = (String) this.modeloProductos.getValueAt(this.jTable2.getSelectedRow(), 3);
+                int cont = 0;
+                for (Restaurante restaurante : lista) {
+                    if (codigoRestaurante.equals(restaurante.getNombre())) {
+                        this.jCboRestaurantesDisponibles.setSelectedIndex(cont);
+                        break;
+                    }
+                    cont++;
+                }
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this, e.toString());
+            }
+            String tipoProducto = (String) this.modeloProductos.getValueAt(this.jTable2.getSelectedRow(), 4);
+            for (int i = 0; i < jCboTipoProducto.getItemCount(); i++) {
+                if (jCboTipoProducto.getItemAt(i).getClass().getSimpleName().equals(tipoProducto)) {
+                    jCboTipoProducto.setSelectedIndex(i);
+                    if (jCboTipoProducto.getItemAt(i) instanceof Preparados) {
+                        jLabel11.setVisible(true);
+                        jTxtTiempo.setVisible(true);
+                        jLabel13.setVisible(false);
+                        jTxtCantidad.setVisible(false);
+                        jTxtTiempo.setText(String.valueOf(this.modeloProductos.getValueAt(this.jTable2.getSelectedRow(), 6)));
+                        jTxtCantidad.setText("1");
+
+                    } else {
+                        jLabel11.setVisible(false);
+                        jTxtTiempo.setVisible(false);
+                        jLabel13.setVisible(true);
+                        jTxtCantidad.setVisible(true);
+                        jTxtCantidad.setText(String.valueOf(this.modeloProductos.getValueAt(this.jTable2.getSelectedRow(), 5)));
+                        jTxtTiempo.setText("0");
+                    }
+                }
+            }
+            jTxtCodigo.setEnabled(false);
+            jBtnAgregar.setEnabled(false);
+            jBtnEliminar.setEnabled(true);
+            jBtnModificar.setEnabled(true);
+        } else {
+            JOptionPane.showMessageDialog(this, "Debe de seleccionar un campo");
+        }
+
+    }//GEN-LAST:event_jTable2MouseClicked
+
+    private void jBtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLimpiarActionPerformed
+        vaciarInformacion();
+    }//GEN-LAST:event_jBtnLimpiarActionPerformed
+
+    private void jBtnLimpiarRActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnLimpiarRActionPerformed
+        // TODO add your handling code here:
+        this.jTxtCodigo1.setText("");
+        this.jTxtLocalizacion.setText("");
+        this.jTxtNombre.setText("");
+        this.jCboTipoComida.setSelectedIndex(-1);
+        this.jTable1.clearSelection();
+    }//GEN-LAST:event_jBtnLimpiarRActionPerformed
+
+    public void vaciarInformacion() {
+        jTxtCodigo.setText("");
+        jTxtDescripcion.setText("");
+        jTxtPrecio.setText("");
+        jTxtTiempo.setText("");
+        jTxtCantidad.setText("");
+        jCboTipoProducto.setSelectedIndex(-1);
+        jCboRestaurantesDisponibles.setSelectedIndex(-1);
+        jTable2.clearSelection();
+        jTxtCodigo.setEnabled(true);
+        jLabel11.setVisible(false);
+        jTxtTiempo.setVisible(false);
+        jLabel13.setVisible(false);
+        jTxtCantidad.setVisible(false);
+        jBtnAgregar.setEnabled(true);
+        jBtnEliminar.setEnabled(false);
+        jBtnModificar.setEnabled(false);
+        jLabel14.setVisible(false);
+        jCboImpuesto.setVisible(false);
+    }
+
+    public Usuario getUsuarioActivo() {
+        return usuarioActivo;
+    }
+
+    public void setUsuarioActivo(Usuario usuarioActivo) {
+        this.usuarioActivo = usuarioActivo;
+    }
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            java.util.logging.Logger.getLogger(JFrmMantenimientoProductoRestaurante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (InstantiationException ex) {
+            java.util.logging.Logger.getLogger(JFrmMantenimientoProductoRestaurante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (IllegalAccessException ex) {
+            java.util.logging.Logger.getLogger(JFrmMantenimientoProductoRestaurante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+            java.util.logging.Logger.getLogger(JFrmMantenimientoProductoRestaurante.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new JFrmMantenimientoProductoRestaurante().setVisible(true);
+            }
+        });
+    }
+
+    // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.ButtonGroup Mantenimiento;
+    private javax.swing.JButton jBtnAgregar;
+    private javax.swing.JButton jBtnEliminar;
+    private javax.swing.JButton jBtnLimpiar;
+    private javax.swing.JButton jBtnLimpiarR;
+    private javax.swing.JButton jBtnModificar;
+    private javax.swing.JButton jBtnSalir;
+    private javax.swing.JComboBox<Integer> jCboImpuesto;
+    private javax.swing.JComboBox<Restaurante> jCboRestaurantesDisponibles;
+    private javax.swing.JComboBox<TipoComida> jCboTipoComida;
+    private javax.swing.JComboBox<Producto> jCboTipoProducto;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
+    private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLblNombreUsuario1;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
+    private javax.swing.JRadioButton jRdbProducto;
+    private javax.swing.JRadioButton jRdbRestaurante;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JTable jTable1;
+    private javax.swing.JTable jTable2;
+    private javax.swing.JToolBar jToolBar1;
+    private javax.swing.JTextField jTxtCantidad;
+    private javax.swing.JTextField jTxtCodigo;
+    private javax.swing.JTextField jTxtCodigo1;
+    private javax.swing.JTextField jTxtDescripcion;
+    private javax.swing.JTextField jTxtLocalizacion;
+    private javax.swing.JTextField jTxtNombre;
+    private javax.swing.JTextField jTxtPrecio;
+    private javax.swing.JTextField jTxtTiempo;
+    // End of variables declaration//GEN-END:variables
+}
