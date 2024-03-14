@@ -1,0 +1,8 @@
+Product Version: Apache NetBeans IDE 21
+Java: 21.0.2; Java HotSpot(TM) 64-Bit Server VM 21.0.2+13-LTS-58
+
+Libraries: mssql-jdbc-12.6.1.jre8 JAR
+
+*Esto puede actualizarse, lo mejor es ver las versiones que dá los de Microsoft
+
+Server: GlassFish

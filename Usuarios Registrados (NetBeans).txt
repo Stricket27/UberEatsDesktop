@@ -1,0 +1,7 @@
+**ADMINISTRADOR**
+Moises = admin - 123
+Laura = admin - 321
+
+**GERENTE**
+Laura = gerenteL@gmail.com - gerenteL
+Moises = gerenteM@gmail.com - gerenteM
